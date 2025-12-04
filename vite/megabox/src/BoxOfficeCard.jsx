@@ -6,9 +6,11 @@ function BoxOfficeCard({ data }) {
   const [liked, setLiked] = useState(false);
   const [count, setCount] = useState(data.like);
 
-  // // k 단위 변환
   const formatCount = (num) => {
-    return num >= 1000 ? (num / 1000).toFixed(1) + "k" : num;
+    if (num >= 1000) {
+      num = Math.floor(num / 100) / 10 + "k";
+    }
+    return num;
   };
 
   const handleClick = () => {
@@ -36,7 +38,7 @@ function BoxOfficeCard({ data }) {
           </div>
         </div>
         <div className="back">
-          <p>{data.description}</p>
+          <p dangerouslySetInnerHTML={{ __html: data.description }} />
           <div className="score">
             관람평<span>{data.score}</span>
           </div>
@@ -44,7 +46,10 @@ function BoxOfficeCard({ data }) {
       </div>
       <div className="btn">
         <button type="button" className={`like`} onClick={handleClick}>
-          <i className={(liked ? "fa-solid" : "fa-regular") + " fa-heart"}></i>
+          <i
+            className={(liked ? "fa-solid" : "fa-regular") + " fa-heart"}
+            style={liked ? { color: "red" } : {}}
+          ></i>
           {formatCount(count)}
         </button>
         <a
